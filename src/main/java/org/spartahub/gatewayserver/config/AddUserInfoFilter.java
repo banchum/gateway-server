@@ -15,6 +15,7 @@ import reactor.core.publisher.Mono;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class AddUserInfoFilter implements GlobalFilter, Ordered {
@@ -45,7 +46,8 @@ public class AddUserInfoFilter implements GlobalFilter, Ordered {
                     ServerHttpRequest mutatedRequest = exchange.getRequest().mutate()
                             .header(HEADER_USER_ID, jwt.getSubject() != null ? jwt.getSubject() : "")
                             .header(HEADER_USER_NAME, jwt.getClaimAsString("preferred_username") != null ? jwt.getClaimAsString("preferred_username") : "")
-                            .header(HEADER_ROLES, String.join(",", roles))
+                            .header(HEADER_ROLES, roles.stream().filter(s->s.startsWith("ROLE_"))
+                                    .collect(Collectors.joining(",")))
                             .header(HEADER_EMAIL, Objects.requireNonNullElse(jwt.getClaimAsString("email"),""))
                             .header(HEADER_USER_NAME, name)
                             .build();
