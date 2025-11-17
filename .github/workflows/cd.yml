@@ -5,7 +5,7 @@ on:
 
 env:
   REGISTRY: ghcr.io # 깃허브 컨테이너 저장소를 사용한다.
-  IMAGE_NAME: banchum/gateway-server
+  IMAGE_NAME: sparta-hub-5/gateway-server
   VERSION: latest
 
 jobs:
